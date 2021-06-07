@@ -3,18 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Adress;
+use App\Authors;
 use App\Category;
 use App\GalleryImage;
 use App\News;
 use App\Program;
 use App\Streaming;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NewsController extends Controller
 {
     public function getNews()
     {
-        $news = new News;
-        $news = News::get();
+        $news = DB::table('news')
+            ->join('categories', 'news.id_category', '=', 'categories.id')
+            ->select('news.*', 'categories.nom')
+            ->orderBy("news.created_at", "desc")
+            ->get();
         return json_encode($news);
     }
 
@@ -71,4 +77,36 @@ class NewsController extends Controller
         return json_encode($newsCategory);
     }
 
+    public function create(Request $request)
+    {
+        $author = new Authors();
+        $author = Authors::find($request->author);
+     
+        $news = new News();
+        $news->tittle = $request->tittle;
+        $news->content = $request->content;
+        $news->short_content = $request->short_content;
+        $news->image = $request->image;
+        $news->id_category = $request->id_category;
+        $news->author = $author->name;
+        $news->avatar_author = $author->avatar_author;
+        $news->save();
+
+        return response()->json([
+            'data' => $news,
+            'message' => 'resource created'
+        ], 201);
+    }
+
+    public function getAllAuthors()
+    {
+        $authors = new Authors();
+        $authors = Authors::get();
+
+        return response()->json([
+            'data' => $authors,
+            'message' => 'resource lists'
+        ], 200);
+       
+    }
 }

@@ -18,12 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('news','NewsController@getNews');
-Route::get('streaming','NewsController@getUrlStreaming');
-Route::get('news/{id}','NewsController@getNewsId');
-Route::get('adress','NewsController@getAdress');
-Route::get('categories','NewsController@getCategories');
-Route::get('programs','NewsController@getPrograms');
-Route::get('gallery-images','NewsController@getGalleryImages');
-Route::get('news-category/{id}','NewsController@getNewsForCategory');
-
+Route::get('news', 'NewsController@getNews');
+Route::get('streaming', 'NewsController@getUrlStreaming');
+Route::get('news/{id}', 'NewsController@getNewsId');
+Route::get('adress', 'NewsController@getAdress');
+Route::get('categories', 'NewsController@getCategories');
+Route::get('programs', 'NewsController@getPrograms');
+Route::get('gallery-images', 'NewsController@getGalleryImages');
+Route::get('news-category/{id}', 'NewsController@getNewsForCategory');
+Route::post('news-create', 'NewsController@create');
+Route::get('authors', 'NewsController@getAllAuthors');
